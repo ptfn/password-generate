@@ -16,16 +16,25 @@ def main():
     print("╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝")
 
     alphabet = ""
-    choice = input("Enter code:\n* BigChar -> b\n* SmallChar -> c\n* Number -> n\n* Symbols -> s\n:")
-    if choice == "":
-        print('Error code!')
-        exit(0)
-    else:
-        alphabet = brut_alph(choice)
 
-    length = int(input("Length passwords:"))
-    password = pass_gen(length, alphabet)
-    print("Password -> {}".format(password))
+    while True:
+        choice = input("Enter code:\n* Password\n* Help\n* Exit\n:")
+        if choice == "Password" or choice == "password":
+            chars = input("Enter code:\n* BigChar -> b\n* SmallChar -> c\n* Number -> n\n* Symbols -> s\n:")
+            if chars == "":
+                print('Error code!')
+                exit(0)
+            else:
+                alphabet = brut_alph(chars)
+            length = int(input("Length passwords:"))
+            password = pass_gen(length, alphabet)
+            print("Password -> {}".format(password))
+        elif choice == "Help" or choice == "help":
+            print("The utility is designed to generate a password. To generate a password, select 'Password'")
+        elif choice == "Exit" or choice == "exit":
+            break
+        else:
+            print("Error choice")
 
 
 def pass_gen(length, symbols):
