@@ -38,7 +38,7 @@ def main():
         elif choice == "Exit" or choice == "exit":
             break
         else:
-            print("Error choice")
+            print("Error choice\n")
 
 
 def pass_gen(length, symbols):
@@ -58,9 +58,9 @@ def brut_alph(string):
             if string[i] == "b":
                 str_res += big_char
                 str_last += "b"
-            if string[i] == "с":
+            if string[i] == "c":
                 str_res += small_char
-                str_last += "с"
+                str_last += "c"
             if string[i] == "n":
                 str_res += number
                 str_last += "n"
