@@ -1,5 +1,4 @@
 import random
-import sys
 
 big_char = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 small_char = "abcdefghijklmnopqrstuvwxyz"
