@@ -7,6 +7,7 @@ symbols = "!?@#$%^&*=<>()[]/|,.+-_"
 
 
 def main():
+
     print("██████╗  █████╗ ███████╗███████╗ ██████╗ ███████╗███╗   ██╗")
     print("██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝ ██╔════╝████╗  ██║")
     print("██████╔╝███████║███████╗███████╗██║  ███╗█████╗  ██╔██╗ ██║")
@@ -20,6 +21,7 @@ def main():
         choice = input("Enter code:\n* Password\n* Help\n* Exit\n:")
         
         if choice == "Password" or choice == "password":
+            
             chars = input("Enter code:\n* BigChar -> b\n* SmallChar -> c\n* Number -> n\n* Symbols -> s\n:")
             
             if chars == "":
@@ -34,7 +36,7 @@ def main():
 
         elif choice == "Help" or choice == "help":
             print("The utility is designed to generate a password. To generate a password, select 'Password'")
-        elif choice == "Exit" or choice == "exit":
+        elif choice == "Exit" or choice == "exit" or choice == "quit" or choice == "Quit":
             break
         else:
             print("Error choice\n")
