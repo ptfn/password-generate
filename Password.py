@@ -1,9 +1,8 @@
 import random
+import hashlib
+import base64
 
-big_char = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-small_char = "abcdefghijklmnopqrstuvwxyz"
-number = "0123456789"
-symbols = "!?@#$%^&*=<>()[]/|,.+-_"
+chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?@#$%^&*=<>()[]/|,.+-_"
 
 
 def main():
@@ -15,61 +14,51 @@ def main():
     print("██║     ██║  ██║███████║███████║╚██████╔╝███████╗██║ ╚████║")
     print("╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝")
 
-    alphabet = ""
-
     while True:
         choice = input("Enter code:\n* Password\n* Help\n* Exit\n:")
         
         if choice == "Password" or choice == "password":
+            text = input("Enter text:")
             
-            chars = input("Enter code:\n* BigChar -> b\n* SmallChar -> c\n* Number -> n\n* Symbols -> s\n:")
-            
-            if chars == "":
+            if text == "":
                 print('Error code!')
                 exit(0)
-            else:
-                alphabet = brut_alph(chars)
 
-            length = int(input("Length passwords:"))
-            password = pass_gen(length, alphabet)
-            print("Password -> {}".format(password))
+            else:
+                length = int(input("Length passwords(max 64):"))
+
+                if length <= 0:
+                    print('Error code!')
+                    exit(0)
+
+                else:
+                    password = pass_gen(length, text)
+                    print("Password -> {}".format(password))
 
         elif choice == "Help" or choice == "help":
             print("The utility is designed to generate a password. To generate a password, select 'Password'")
+
         elif choice == "Exit" or choice == "exit" or choice == "quit" or choice == "Quit":
             break
+
         else:
             print("Error choice\n")
 
 
-def pass_gen(length, symbols):
+def pass_gen(length, text):
     password = ""
+    key = ""
+    string = ""
     
-    for i in range(length):
-        password += random.choice(symbols)
-    return password
+    for i in range(len(text)):
+        key += random.choice(chars)
+    
+    string = password + text + key
+    password = hashlib.sha1(str(string).encode("ascii")).hexdigest()
+    encbyte = base64.b64encode(password.encode("utf-8"))
+    encstr = str(encbyte, "utf-8")
 
-
-def brut_alph(string):
-    str_last = ""
-    str_res = ""
-
-    for i in range(len(string)):
-        if string[i] not in str_last:
-            if string[i] == "b":
-                str_res += big_char
-                str_last += "b"
-            if string[i] == "c":
-                str_res += small_char
-                str_last += "c"
-            if string[i] == "n":
-                str_res += number
-                str_last += "n"
-            if string[i] == "s":
-                str_res += symbols
-                str_last += "s"
-    return str_res
-
+    return encstr[:length]
 
 if __name__ == "__main__":
     main()
