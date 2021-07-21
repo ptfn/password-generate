@@ -4,7 +4,6 @@ import base64
 
 chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?@#$%^&*=<>()[]/|,.+-_"
 
-
 def main():
 
     print("██████╗  █████╗ ███████╗███████╗ ██████╗ ███████╗███╗   ██╗")
@@ -15,50 +14,77 @@ def main():
     print("╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝")
 
     while True:
-        choice = input("Enter code:\n* Password\n* Help\n* Exit\n:")
+        chc = input("Enter code:\n* Password\n* Help\n* Exit\n:")
         
-        if choice == "Password" or choice == "password":
-            text = input("Enter text:")
-            
-            if text == "":
-                print('Error code!')
-                exit(0)
+        if chc == "Password" or chc == "password" or chc == "pass":
+            opt = input("Choose a way to generate your password:\n* Random\n* Hash\n:")
 
-            else:
-                length = int(input("Length passwords(max 64):"))
-
-                if length <= 0:
-                    print('Error code!')
+            if opt == "hash" or opt == "Hash":
+                text = input("Enter text\n:")
+                
+                if text == "":
+                    print("The text is not visible!")
                     exit(0)
 
                 else:
-                    password = pass_gen(length, text)
+                    leng = int(input("Length passwords(max 64)\n:"))
+
+                    if leng <= 0:
+                        print("Incorrect password length!")
+                        exit(0)
+
+                    else:
+                        password = pass_hash(leng, text)
+                        print("Password -> {}".format(password))
+            
+            elif opt == "Random" or opt == "random" or opt == "rand":
+                leng = int(input("Length passwords\n:"))
+
+                if leng <= 0:
+                    print("Incorrect password length!")
+                    exit(0)
+
+                else:
+                    password = pass_rand(leng)
                     print("Password -> {}".format(password))
 
-        elif choice == "Help" or choice == "help":
+            else:
+                print("Error option!")
+                exit(0)
+
+        elif chc == "Help" or chc == "help":
             print("The utility is designed to generate a password. To generate a password, select 'Password'")
 
-        elif choice == "Exit" or choice == "exit" or choice == "quit" or choice == "Quit":
+        elif chc == "Exit" or chc == "exit" or chc == "quit" or chc == "Quit":
             break
 
         else:
-            print("Error choice\n")
+            print("Error choice!")
 
 
-def pass_gen(length, text):
+def pass_hash(length, text):
     password = ""
     key = ""
     string = ""
-    
+
     for i in range(len(text)):
         key += random.choice(chars)
-    
+
     string = password + text + key
     password = hashlib.sha1(str(string).encode("ascii")).hexdigest()
     encbyte = base64.b64encode(password.encode("utf-8"))
     encstr = str(encbyte, "utf-8")
 
     return encstr[:length]
+
+
+def pass_rand(length):
+    password = ""
+
+    for i in range(length):
+        password += random.choice(chars)
+
+    return password
 
 if __name__ == "__main__":
     main()
