@@ -5,16 +5,8 @@ import base64
 chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?@#$%^&*=<>()[]/|,.+-_"
 
 def main():
-
-    print("██████╗  █████╗ ███████╗███████╗ ██████╗ ███████╗███╗   ██╗")
-    print("██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝ ██╔════╝████╗  ██║")
-    print("██████╔╝███████║███████╗███████╗██║  ███╗█████╗  ██╔██╗ ██║")
-    print("██╔═══╝ ██╔══██║╚════██║╚════██║██║   ██║██╔══╝  ██║╚██╗██║")
-    print("██║     ██║  ██║███████║███████║╚██████╔╝███████╗██║ ╚████║")
-    print("╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝")
-
     while True:
-        chc = input("Enter code:\n* Password\n* Help\n* Exit\n:")
+        chc = input("Enter code:\n1)Password\n2)Help\n3)Exit\n:")
         
         if chc == "Password" or chc == "password" or chc == "pass":
             opt = input("Choose a way to generate your password:\n* Random\n* Hash\n:")
