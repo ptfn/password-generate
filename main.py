@@ -2,58 +2,77 @@ from random import randint, choice
 from colorama import Fore, Style
 from base64 import b64encode
 from hashlib import sha512
-from math import log
+from math import log2
 import argparse
 
-chars = """ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq\
-rstuvwxyz0123456789!?@#$%^&*=<>()[]/|,.+-_"'"""
+big_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+small_chars = "abcdefghijklmnopqrstuvwxyz"
+numbers = "0123456789"
+symbols = r'''!?@#$%^&*=<>()[]/\|,.+-_'"'''
+chars = big_chars + small_chars + numbers + symbols
 
 
-def crt(string):
-    char = {}
-    for i in range(len(string)):
-        try:
-            char[string[i]] += 1
-        except Exception:
-            char[string[i]] = 1
-    arr = [char[i] for i in char]
-    return arr
-
-
-def pass_ent(arr):
-    total = sum(arr)
-    entropy = 0
-    for i in range(len(arr)):
-        p = arr[i] / total
-        if p > 0:
-            entropy -= p * log(p, 2)
-    return entropy / 8 * 100
+def pass_ent(string):
+    return round(len(string) * log2(256), 4)
 
 
 def pass_lvl(num):
-    if num < 37.5:
-        return txt_rd('Bad')
-    elif num < 40:
-        return txt_yel('Weak')
+    if num < 30:
+        return txt_rd("Pathetic")
+
     elif num < 50:
-        return txt_grn('Good')
+        return txt_rd("Bad")
+
+    elif num < 70:
+        return txt_yel("Weak")
+
+    elif num < 120:
+        return txt_grn("Good")
+
     else:
-        return txt_grn('Excellent')
+        return txt_grn("Excellent")
+
+
+def hex_to_dec(string, begin, end):
+    return chr(int(string[begin:end], 16))
 
 
 def pass_hash(string, lenght):
     for i in range(randint(2, 128)):
         string = sha512(str(string).encode("ascii")).hexdigest()
+
+    strhash = ""
+
+    for i in range(0, len(string)-2, 2):
+        strhash += hex_to_dec(string, i, i+2)
+
+    return strhash[:lenght]
+
+
+def pass_base(string, lenght):
+    for i in range(randint(2, 128)):
+        string = sha512(str(string).encode("ascii")).hexdigest()
+
     encbyte = b64encode(string.encode("utf-8"))
     encstr = str(encbyte, "utf-8")[:lenght]
+
     return encstr
 
 
 def pass_rand(length):
     password = ""
+
     for i in range(length):
         password += choice(chars)
+
     return password
+
+
+def gen_pass(password):
+    entropy = pass_ent(password)
+    level = pass_lvl(entropy)
+    return f"Password\t{txt_grn(password)}\
+\nEntropy\t\t{txt_grn(level)} ({entropy} Bit)"
 
 
 def txt_grn(text):
@@ -76,24 +95,27 @@ def main():
                         dest='random', help='Random algorithm')
     parser.add_argument('-hs', '--hash', action='store_true',
                         dest='hash', help='Hash algorithm')
+    parser.add_argument('-b', '--base', action='store_true',
+                        dest='base', help='Base64 and hash algorithm')
 
     args = parser.parse_args()
     leng = args.leng
     random = args.random
     hsh = args.hash
+    base = args.base
 
     if random:
         password = pass_rand(leng)
-        entropy = round(pass_ent(crt(password)), 4)
-        level = pass_lvl(entropy)
-        print(f"Password\t{txt_grn(password)}\
-\nEntropy\t\t{txt_grn(level)} ({entropy})")
+        print(gen_pass(password))
+
     elif hsh:
         password = pass_hash(pass_rand(randint(1, leng)), leng)
-        entropy = round(pass_ent(crt(password)), 4)
-        level = pass_lvl(entropy)
-        print(f"Password\t{txt_grn(password)}\
-\nEntropy\t\t{txt_grn(level)} ({entropy})")
+        print(gen_pass(password))
+
+    elif base:
+        password = pass_base(pass_rand(randint(1, leng)), leng)
+        print(gen_pass(password))
+
     else:
         print(txt_rd("Error!"))
 
