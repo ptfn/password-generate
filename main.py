@@ -7,13 +7,13 @@ import argparse
 
 big_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 small_chars = "abcdefghijklmnopqrstuvwxyz"
+symbols = "!?@#$%^&*=<>()[]/|,.+-_"
 numbers = "0123456789"
-symbols = r'''!?@#$%^&*=<>()[]/\|,.+-_'"'''
 chars = big_chars + small_chars + numbers + symbols
 
 
 def pass_ent(string):
-    return round(len(string) * log2(256), 4)
+    return round(len(string) * log2(85), 4)
 
 
 def pass_lvl(num):
@@ -71,8 +71,8 @@ def pass_rand(length):
 def gen_pass(password):
     entropy = pass_ent(password)
     level = pass_lvl(entropy)
-    return f"Password\t{txt_grn(password)}\
-\nEntropy\t\t{txt_grn(level)} ({entropy} Bit)"
+    return f"Password {txt_grn(password)}\
+\nEntropy {txt_grn(level)} ({entropy} Bit)"
 
 
 def txt_grn(text):
